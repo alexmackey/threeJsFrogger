@@ -1,0 +1,1 @@
+Grass texture from three.js examples\textures\terrain

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Intro to WebGL with Three.js - Game</title>
+
+        <style>
+
+            body{
+                padding: 0;
+                margin: 0;
+
+            }
+
+            #control-panel{
+                position: absolute;
+                right: 0;
+                
+                width: 200px;
+                height: 50px;
+            }
+
+            #control-panel {
+                margin-top: 10px
+                font-family: arial;
+                font-size: 40px;
+            }
+
+            
+        </style>
+    </head>
+
+    <body>
+
+        <div id="control-panel">
+            <label>Lives:</label> <span id="numberOfLives">3</span>
+        </div>
+
+        <div id="webgl-container">
+        </div>
+
+
+        <script src="scripts/three.js"></script>
+        <script src="fonts/helvetiker_regular.typeface.js"></script>
+
+        <script src="scripts/support.js"></script>
+        <script src="scripts/PointerLockControls.js"></script>
+
+        <script src="scripts/physi.js"></script>
+
+        <script src="scripts/sceneSetup.js"></script>
+        <script src="scripts/gameControls.js"></script>
+
+        <script src="scripts/enemy.js"></script>
+        <script src="scripts/player.js"></script>
+
+        <script src="scripts/_game.js"></script>
+
+
+    <script>
+
+    </script>
+
+    </body>
+
+</html>
