@@ -34,7 +34,6 @@ var enemy = (function () {
         startPos = origin == 'right' ? startPos : -startPos;
 
         enemy.position.set(startPos, 18, zPos);
-        enemy.addEventListener('collision', handleCollision);
 
         enemy.userData = {
             origin: origin,
@@ -44,6 +43,8 @@ var enemy = (function () {
         }
 
         enemy.name = 'enemy';
+        enemy.addEventListener('collision', handleCollision);
+
         enemies.push(enemy);
 
         game.scene.add(enemy);
@@ -52,8 +53,7 @@ var enemy = (function () {
     function handleCollision(objectCollidedWith) {
 
         if (objectCollidedWith.name == "playerBox") {
-
-            game.controls.enabled = false;
+            pointerLock.controls.enabled = false;
             game.playerActive = false;
             game.removeLife();
 
@@ -73,11 +73,11 @@ var enemy = (function () {
         createEnemy('left', 0.2, 0, -60);
 
         //road 3
-        createEnemy('right', 1, -200, -130);
-        createEnemy('left', 1, -300, -190);
+        createEnemy('right', 1.3, -200, -130);
+        createEnemy('left', 1.3, -300, -190);
 
         //road 4
-        createEnemy('right', 1, -200, -520);
+        createEnemy('right', 1.3, -200, -520);
     }
 
     function handlePlayerKilled() {
@@ -86,14 +86,8 @@ var enemy = (function () {
         game.scene.remove(playerBox);
 
         game.resetScene();
-
         player.createPlayer();
-
         game.playerActive = true;
-    }
-
-    function init() {
-        createEnemies();
     }
 
     function update(delta) {
@@ -103,14 +97,9 @@ var enemy = (function () {
         for (var i = 0; i < enemies.length; i++) {
 
             var enemy = enemies[i];
+            var movement = enemy.userData.origin == 'right' ? 200 : -200;
 
-
-            if (enemy.userData.origin == 'right') {
-                enemy.position.x -= 200 * (delta * enemy.userData.speed);
-            }
-            else {
-                enemy.position.x += 200 * (delta * enemy.userData.speed);
-            }
+            enemy.position.x -= movement * (delta * enemy.userData.speed);
 
             if ((enemy.userData.origin == 'right' && enemy.position.x < -400) || (enemy.userData.origin == 'left' && enemy.position.x > 400)) {
                 //restart enemy over other side
@@ -123,6 +112,10 @@ var enemy = (function () {
                 enemy.__dirtyPosition = true;
             }
         }
+    }
+
+    function init() {
+        createEnemies();
     }
 
     return {

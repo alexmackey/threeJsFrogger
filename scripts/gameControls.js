@@ -1,8 +1,3 @@
-/*
-Handles keyboard controls
-Note pointerlock functionality in PointerLockControls.js (modified version from three.js examples)
- */
-
 var gameControls=(function(){
 
     function checkKey(e) {

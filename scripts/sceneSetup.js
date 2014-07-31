@@ -1,7 +1,3 @@
-/*
- Sets up the scene by creating the road, trees, lake and lighting
- */
-
 var sceneSetup = (function () {
 
     "use strict";

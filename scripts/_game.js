@@ -10,7 +10,6 @@ var game = (function () {
         clock = new THREE.Clock(),
         width = window.innerWidth,
         height = window.innerHeight - 10,
-        playerBoxMaterial,
         playerBox,
         renderer = new THREE.WebGLRenderer(),
         playerActive = true,
@@ -19,6 +18,7 @@ var game = (function () {
 
     renderer.setSize(width, height);
     renderer.setClearColor(0xE0EEEE);
+
     document.getElementById("webgl-container").appendChild(renderer.domElement);
 
     camera = new THREE.PerspectiveCamera(
@@ -28,9 +28,7 @@ var game = (function () {
         1000
     );
 
-    //controls = new THREE.PointerLockControls(camera);
     scene.add(camera);
-
     scene.fog = new THREE.Fog(0xE0EEEE, 250, 600);
     scene.setGravity(new THREE.Vector3(0, -100, 0));
 
@@ -38,10 +36,6 @@ var game = (function () {
 
         resetScene();
         pointerLock.init(camera, scene);
-
-        //controls = new THREE.PointerLockControls(camera);
-        //scene.add(controls.getObject());
-
         sceneSetup.addSceneObjects();
         enemy.init();
         player.createPlayer();
@@ -65,7 +59,6 @@ var game = (function () {
     }
 
     function render() {
-
         scene.simulate();
         pointerLock.controls.update();
 
@@ -80,33 +73,6 @@ var game = (function () {
         requestAnimationFrame(render);
     }
 
-    //pointerlock needs click to activate
-    document.addEventListener('click', function (event) {
-
-        var element = document.getElementsByTagName("canvas")[0];
-
-        var pointerlockchange = function (event) {
-
-            if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
-                controls.enabled = true;
-            } else {
-                controls.enabled = false;
-            }
-
-        }
-
-        document.addEventListener('pointerlockchange', pointerlockchange, false);
-        document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-        document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
-        element.requestPointerLock = element.requestPointerLock ||
-            element.mozRequestPointerLock ||
-            element.webkitRequestPointerLock;
-
-        element.requestPointerLock();
-
-    }, false);
-
     return {
         scene: scene,
         camera: camera,
@@ -117,9 +83,7 @@ var game = (function () {
         resetScene: resetScene,
         lives: lives,
         removeLife: removeLife
-
     }
-
 
 })();
 

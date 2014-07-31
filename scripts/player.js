@@ -97,10 +97,9 @@ var player=(function(){
             playerBoxMaterial,
             0.1
         );
-        playerBox.position.set(0, 20, 50);
+        playerBox.position.set(0, 24, 50);
         playerBox.name = "playerBox";
         playerBox.add(playerHead);
-
 
         game.scene.add(playerBox);
     }
