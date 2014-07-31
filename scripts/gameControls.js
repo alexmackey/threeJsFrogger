@@ -1,3 +1,8 @@
+/*
+Handles keyboard controls
+Note pointerlock functionality in PointerLockControls.js (modified version from three.js examples)
+ */
+
 var gameControls=(function(){
 
     function checkKey(e) {
@@ -10,7 +15,7 @@ var gameControls=(function(){
             up = 38,
             right = 39,
             down = 40,
-            increment = 1;
+            increment = 2;
 
         e = e || window.event;
 

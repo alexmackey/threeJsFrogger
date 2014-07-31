@@ -1,4 +1,4 @@
-var support = (function(){
+var support = (function () {
 
     "use strict";
 
@@ -6,10 +6,8 @@ var support = (function(){
         return Math.random() * (max - min) + min;
     }
 
-
     return {
         getRand: getRand
-
     }
 
 })();

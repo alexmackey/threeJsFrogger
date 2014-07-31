@@ -1,4 +1,4 @@
-var game = (function() {
+var game = (function () {
 
     "use strict";
 
@@ -9,114 +9,105 @@ var game = (function() {
         camera,
         clock = new THREE.Clock(),
         width = window.innerWidth,
-        height = window.innerHeight-10,
+        height = window.innerHeight - 10,
         playerBoxMaterial,
         playerBox,
         renderer = new THREE.WebGLRenderer(),
-        playerActive=true,
-        lives=3,
+        playerActive = true,
+        lives = 3,
         controls;
-
-    scene.fog = new THREE.Fog(0xE0EEEE, 250, 600);
-    scene.setGravity(new THREE.Vector3(0, -50, 0));
 
     renderer.setSize(width, height);
     renderer.setClearColor(0xE0EEEE);
-
     document.getElementById("webgl-container").appendChild(renderer.domElement);
 
-        camera = new THREE.PerspectiveCamera(
+    camera = new THREE.PerspectiveCamera(
         35,
         width / height,
         1,
         1000
     );
 
-    controls = new THREE.PointerLockControls(camera);
-
+    //controls = new THREE.PointerLockControls(camera);
     scene.add(camera);
+
+    scene.fog = new THREE.Fog(0xE0EEEE, 250, 600);
+    scene.setGravity(new THREE.Vector3(0, -100, 0));
 
     function init() {
 
         resetScene();
+        pointerLock.init(camera, scene);
 
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
+        //controls = new THREE.PointerLockControls(camera);
+        //scene.add(controls.getObject());
 
         sceneSetup.addSceneObjects();
         enemy.init();
         player.createPlayer();
         gameControls.init();
 
+        render();
+    }
+
+    function resetScene() {
+        camera.position.set(0, 20, 200);
+        camera.rotation.set(0, 0, 0);
+    }
+
+    function removeLife() {
+        lives -= 1;
+        document.getElementById("numberOfLives").innerHTML = lives;
+
+        if (lives == 0) {
+            alert('game over');
+        }
+    }
+
+    function render() {
+
+        scene.simulate();
+        pointerLock.controls.update();
+
+        var delta = clock.getDelta();
+        enemy.update(delta);
+
+        if (game.wintext) {
+            game.wintext.rotation.y += 0.01;
+        }
+
+        renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
 
-    function resetScene(){
-        camera.position.set(0, 20, 200);
-        camera.rotation.set( 0, 0, 0 );
+    //pointerlock needs click to activate
+    document.addEventListener('click', function (event) {
 
-        removeLife();
-    }
-
-    function removeLife(){
-        lives-=1;
-
-        document.getElementById("numberOfLives").innerHTML= lives;
-
-        if(lives==0){
-            alert('game over');
-        }
-               
-    }
-
-    document.addEventListener( 'click', function ( event ) {
-
-        var element = document.getElementsByTagName("canvas")[0]; //document.body;
+        var element = document.getElementsByTagName("canvas")[0];
 
         var pointerlockchange = function (event) {
 
-            if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+            if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
                 controls.enabled = true;
-            }else{
+            } else {
                 controls.enabled = false;
             }
 
         }
 
-        document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-        document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-        document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+        document.addEventListener('pointerlockchange', pointerlockchange, false);
+        document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+        document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
 
         element.requestPointerLock = element.requestPointerLock ||
             element.mozRequestPointerLock ||
             element.webkitRequestPointerLock;
 
-
         element.requestPointerLock();
 
+    }, false);
 
-
-    }, false );
-
-
-
-
-    function render() {
-
-        scene.simulate(undefined, 1);
-        controls.update();
-
-        var delta = clock.getDelta();
-        enemy.update(delta);
-
-        if(game.wintext){
-            game.wintext.rotation.y += 0.01;
-        }
-        renderer.render(scene, camera);
-        requestAnimationFrame(render);
-    }
-
-     return {
+    return {
         scene: scene,
         camera: camera,
         playerBox: playerBox,
@@ -124,7 +115,8 @@ var game = (function() {
         controls: controls,
         playerActive: playerActive,
         resetScene: resetScene,
-        lives: lives
+        lives: lives,
+        removeLife: removeLife
 
     }
 

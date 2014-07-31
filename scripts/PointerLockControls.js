@@ -36,7 +36,7 @@ THREE.PointerLockControls = function ( camera ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-
+        //stops player rotating under the ground
         if(pitchObject.rotation.x > 0.13){
             pitchObject.rotation.x = 0.13;
         }

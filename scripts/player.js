@@ -4,20 +4,17 @@ var player=(function(){
 
     var movementRate = 3,
         playerBox,
-        playerBoxMaterial;
+        playerBoxMaterial,
+        finishLineZPos=-920;
 
     function init(){
-
-
     }
 
     function moveX(movement) {
-        //game.camera.position.x += movementRate * movement;
         game.camera.position.x += movementRate * movement;
         game.camera.__dirtyPosition = true;
         playerBox.position.x  += movementRate * movement;
         playerBox.__dirtyPosition = true;
-
     }
 
     function moveZ(movement) {
@@ -26,45 +23,34 @@ var player=(function(){
         playerBox.position.z += movementRate  * movement;
         playerBox.__dirtyPosition = true;
 
-        checkIfAtFinish();
+        checkIfPlayerAtFinish();
     }
 
-    function checkIfAtFinish(){
-        if(playerBox.position.z<=-920){
+    function checkIfPlayerAtFinish(){
 
-            if(game.wintext) return;
+        if(playerBox.position.z<=finishLineZPos){
 
-            createText('You win!');
+            if(game.wintext){
+                //dont display win text twice!
+                return;
+            }
 
-            return;
-            game.scene.remove(playerBox);
-            game.resetScene();
-            player.createPlayer();
-            game.playerActive = true;
+            text.createText('You win!', 'winText');
         }
-    }
-
-    function createText(textContent){
-        var text3d = new THREE.TextGeometry( textContent, {
-
-            size: 50,
-            height: 20,
-            curveSegments: 2,
-            font: "helvetiker"
-
-        });
-
-
-        var textMaterial = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff} );
-        var textMesh = new THREE.Mesh( text3d, textMaterial );
-        textMesh.position.set(-120, 60, -1200);
-        game.scene.add(textMesh);
-        game.wintext= textMesh;
     }
 
     function createPlayer(){
 
         playerBoxMaterial = Physijs.createMaterial(
+            new THREE.MeshBasicMaterial({
+                color: 0x0000ff,
+                opacity: 0
+            }),
+            0.1, //friction
+            0.5 //restitution/bounciness
+        );
+
+        var personMaterial = Physijs.createMaterial(
             new THREE.MeshBasicMaterial({
                 color: 0x0000ff,
                 transparent: true,
@@ -74,14 +60,47 @@ var player=(function(){
             0.5 //restitution/bounciness
         );
 
-        playerBox = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(2, 14, 2),
-            playerBoxMaterial,
+        var playerHead = new Physijs.SphereMesh(
+            new THREE.SphereGeometry(5, 14, 14),
+            personMaterial,
             0.1
         );
 
-        playerBox.position.set(0, 7.6, 50);
+        var playerBody = new Physijs.BoxMesh(
+            new THREE.BoxGeometry(6, 10, 5),
+            personMaterial,
+            0.1
+        );
+        playerHead.add(playerBody);
+        playerBody.position.y = -8;
+
+        var playerLLeg = new Physijs.BoxMesh(
+            new THREE.BoxGeometry(2, 10, 5),
+            personMaterial,
+            0.1
+        );
+        playerBody.add(playerLLeg);
+        playerLLeg.position.y = -10;
+        playerLLeg.position.x = -2;
+
+        var playerRLeg = new Physijs.BoxMesh(
+            new THREE.BoxGeometry(2, 10, 5),
+            personMaterial,
+            0.1
+        );
+        playerBody.add(playerRLeg);
+        playerRLeg.position.y = -10;
+        playerRLeg.position.x = 2;
+
+        playerBox =  new Physijs.BoxMesh(
+            new THREE.CubeGeometry(10, 16, 10),
+            playerBoxMaterial,
+            0.1
+        );
+        playerBox.position.set(0, 20, 50);
         playerBox.name = "playerBox";
+        playerBox.add(playerHead);
+
 
         game.scene.add(playerBox);
     }
