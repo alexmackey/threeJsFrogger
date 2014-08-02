@@ -1,4 +1,4 @@
-# Three.js Frogger #
+# Three.JS Frogger #
 
 Simple game similar to frogger created for Pluralsight Three.js Fundamentals Course. Note use branch Pluralsight if you want to use same version of code as when course was published.
 
