@@ -2,7 +2,7 @@ var player=(function(){
 
     "use strict";
 
-    var movementRate = 3,
+    var movementRate = 2,
         playerBox,
         playerBoxMaterial,
         finishLineZPos=-920;
@@ -43,63 +43,55 @@ var player=(function(){
 
         playerBoxMaterial = Physijs.createMaterial(
             new THREE.MeshBasicMaterial({
-                color: 0x0000ff,
-                opacity: 0
+                visible: false
             }),
             0.1, //friction
             0.5 //restitution/bounciness
         );
 
-        var personMaterial = Physijs.createMaterial(
-            new THREE.MeshBasicMaterial({
-                color: 0x0000ff,
+        var personMaterial = 
+            new THREE.MeshPhongMaterial({
+                ambient: 0x0dd00,
                 transparent: true,
-                opacity: 0.8
-            }),
-            0.1, //friction
-            0.5 //restitution/bounciness
-        );
+                
+            });
 
-        var playerHead = new Physijs.SphereMesh(
-            new THREE.SphereGeometry(5, 14, 14),
-            personMaterial,
-            0.1
-        );
-
+       
         var playerBody = new Physijs.BoxMesh(
-            new THREE.BoxGeometry(6, 10, 5),
+            new THREE.BoxGeometry(8, 5, 5),
             personMaterial,
             0.1
         );
-        playerHead.add(playerBody);
+        
         playerBody.position.y = -8;
 
         var playerLLeg = new Physijs.BoxMesh(
-            new THREE.BoxGeometry(2, 10, 5),
+            new THREE.BoxGeometry(2, 5, 5),
             personMaterial,
             0.1
         );
         playerBody.add(playerLLeg);
-        playerLLeg.position.y = -10;
+        playerLLeg.position.y = -5;
         playerLLeg.position.x = -2;
 
         var playerRLeg = new Physijs.BoxMesh(
-            new THREE.BoxGeometry(2, 10, 5),
+            new THREE.BoxGeometry(2, 5, 5),
             personMaterial,
             0.1
         );
         playerBody.add(playerRLeg);
-        playerRLeg.position.y = -10;
+        playerRLeg.position.y = -5;
         playerRLeg.position.x = 2;
 
         playerBox =  new Physijs.BoxMesh(
-            new THREE.CubeGeometry(10, 16, 10),
+            new THREE.CubeGeometry(10, 10, 10),
             playerBoxMaterial,
             0.1
         );
-        playerBox.position.set(0, 24, 50);
+        playerBox.position.set(0, 15, 50);
         playerBox.name = "playerBox";
-        playerBox.add(playerHead);
+        playerBox.add(playerBody);
+        playerBody.position.y = 2;
 
         game.scene.add(playerBox);
     }
